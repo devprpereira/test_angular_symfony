@@ -14,6 +14,7 @@ import { CommonModule } from '@angular/common';
   selector: 'orders-table',
   standalone: true,
   templateUrl: './ordersTable.component.html',
+  styleUrls: ['./ordersTable.component.css'],
   imports: [
     MatTableModule,
     HttpClientModule,
