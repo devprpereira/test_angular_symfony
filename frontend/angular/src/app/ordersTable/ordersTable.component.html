@@ -5,16 +5,16 @@
     <input
       matInput
       placeholder="Do search"
-      (keyup)="search($event)"
-      (focus)="setupFilter('customer')"
+      (keyup)="applyFilter()"
+      [(ngModel)]="customerSearch"
     />
   </mat-form-field>
   <mat-form-field >
     <mat-label>Select status</mat-label>
     <mat-select
       placeholder="Select status type"
-      (selectionChange)="selectSearch($event.value)"
-      (click)="setupFilter('status')"
+      (selectionChange)="applyFilter()"
+      [(ngModel)]="statusSearch"
     >
     <mat-option value="">Select a status</mat-option>
       @for (status of statusOptions; track status) {

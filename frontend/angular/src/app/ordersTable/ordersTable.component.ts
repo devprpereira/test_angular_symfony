@@ -13,6 +13,7 @@ import {
 import { MatSelectModule } from '@angular/material/select';
 import { CommonModule } from '@angular/common';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'orders-table',
@@ -28,7 +29,9 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    ReactiveFormsModule,
+    FormsModule,
   ],
   providers: [
     OrdersService,
@@ -40,6 +43,8 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 })
 export class OrdersTableComponent implements OnInit {
   public dataSource: any;
+  public customerSearch: string = '';
+  public statusSearch: string = '';
   public displayedColumns: string[] = [
     'id',
     'date',
@@ -100,6 +105,24 @@ export class OrdersTableComponent implements OnInit {
     this.ordersService.fetchOrders().subscribe((orders) => {
       this.dataSource = new MatTableDataSource<OrderInterface>(orders);
       this.dataSource.paginator = this.paginator;
+
+      this.dataSource.filterPredicate = (
+        data: OrderInterface,
+        filter: { customer: string; status: string }
+      ) => {
+        let customerMatch = true;
+        let statusMatch = true;
+
+        if (filter.customer !== '') {
+          customerMatch = data.customer.toLowerCase().includes(filter.customer);
+        }
+
+        if (filter.status !== '') {
+          statusMatch = data.status.includes(filter.status);
+        }
+
+        return statusMatch && customerMatch;
+      };
     });
   }
 
@@ -110,24 +133,26 @@ export class OrdersTableComponent implements OnInit {
     };
   }
 
-  public search(event: KeyboardEvent) {
-    const search: string = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = search;
-  }
-
-  public selectSearch(event: MouseEvent) {
-    this.dataSource.filter = event;
-  }
-
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  public constructor(private ordersService: OrdersService, private _snackBar: MatSnackBar) {}
+  public constructor(
+    private ordersService: OrdersService,
+    private _snackBar: MatSnackBar
+  ) {}
 
   openSnackBar(message: string) {
-    this._snackBar.open(message, "Dismiss", {duration: 3000});
+    this._snackBar.open(message, 'Dismiss', { duration: 3000 });
   }
 
   ngOnInit(): void {
     this.fetchOrders();
+  }
+
+  applyFilter() {
+    const filterValue = {
+      customer: this.customerSearch.trim().toLowerCase(),
+      status: this.statusSearch.trim().toLowerCase(),
+    };
+    this.dataSource.filter = filterValue;
   }
 }
