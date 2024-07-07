@@ -6,9 +6,13 @@ import { MatIcon } from '@angular/material/icon';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { OrderInterface } from './orders.interface';
 import { MatInputModule } from '@angular/material/input';
-import { MatFormFieldModule } from '@angular/material/form-field';
+import {
+  MAT_FORM_FIELD_DEFAULT_OPTIONS,
+  MatFormFieldModule,
+} from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { CommonModule } from '@angular/common';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'orders-table',
@@ -24,8 +28,15 @@ import { CommonModule } from '@angular/common';
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
+    MatSnackBarModule
   ],
-  providers: [OrdersService],
+  providers: [
+    OrdersService,
+    {
+      provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
+      useValue: { appearance: 'outline' },
+    },
+  ],
 })
 export class OrdersTableComponent implements OnInit {
   public dataSource: any;
@@ -77,8 +88,10 @@ export class OrdersTableComponent implements OnInit {
 
     this.ordersService.cancelItem(id).subscribe((apiReturn) => {
       if (apiReturn.status) {
-        window.alert('It\'s not possible to cancel this item at this time.');
+        window.alert("It's not possible to cancel this item at this time.");
       }
+
+      this.openSnackBar(`Item ${id} cancelled!`);
       this.fetchOrders();
     });
   }
@@ -108,7 +121,11 @@ export class OrdersTableComponent implements OnInit {
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  public constructor(private ordersService: OrdersService) {}
+  public constructor(private ordersService: OrdersService, private _snackBar: MatSnackBar) {}
+
+  openSnackBar(message: string) {
+    this._snackBar.open(message, "Dismiss", {duration: 3000});
+  }
 
   ngOnInit(): void {
     this.fetchOrders();
