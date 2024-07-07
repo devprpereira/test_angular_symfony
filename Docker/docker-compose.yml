@@ -1,0 +1,43 @@
+version: "3"
+
+services:
+  symfony:
+    container_name: "${CONTAINER_NAME_PREFIX}"
+    build: ./docker/php-apache
+    volumes:
+      - ../backend/App:/var/www/html
+    ports:
+      - "80:80"
+
+  frontend:
+    build:
+      context: ../frontend/angular
+      target: builder
+    container_name: frontend
+    ports:
+      - 4200:4200
+    volumes:
+      - ../frontend/angular:/project
+
+  db:
+    container_name: "db"
+    image: mariadb:latest
+    environment:
+      - MARIADB_ROOT_USER=${ROOT_USER}
+      - MARIADB_ALLOW_EMPTY_ROOT_PASSWORD=yes
+      - MARIADB_USER=${DB_USER}
+      - MARIADB_PASSWORD=${DB_PASSWORD}
+      - MARIADB_DATABASE=${DB_NAME}
+    volumes:
+      - db:/var/lib/mysql
+    ports:
+      - "3306:3306"
+
+  adminer:
+    container_name: "adminer"
+    image: adminer
+    ports:
+      - "8080:8080"
+
+volumes:
+  db:

@@ -1,0 +1,112 @@
+<div>
+  <mat-form-field style="margin-right: 20px; margin-left: 10px;">
+    <mat-label>Customer Search</mat-label>
+    <input
+      matInput
+      placeholder="Do search"
+      (keyup)="search($event)"
+      (focus)="setupFilter('customer')"
+    />
+  </mat-form-field>
+  <mat-form-field >
+    <mat-label>Select status</mat-label>
+    <mat-select
+      placeholder="Select status type"
+      (selectionChange)="selectSearch($event.value)"
+      (click)="setupFilter('status')"
+    >
+    <mat-option value="">Select a status</mat-option>
+      @for (status of statusOptions; track status) {
+      <mat-option [value]="status.name" value="{{status.name}}" >{{ status.viewName }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+
+  <table mat-table [dataSource]="dataSource">
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef>Id</th>
+      <td mat-cell *matCellDef="let element">{{ element.id }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="date">
+      <th mat-header-cell *matHeaderCellDef>Date</th>
+      <td mat-cell *matCellDef="let element">{{ element.date.date | date:'yyyy-MM-dd HH:mm:ss' }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="customer">
+      <th mat-header-cell *matHeaderCellDef>Customer</th>
+      <td mat-cell *matCellDef="let element">{{ element.customer }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="address1">
+      <th mat-header-cell *matHeaderCellDef>Address</th>
+      <td mat-cell *matCellDef="let element">{{ element.address1 }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="city">
+      <th mat-header-cell *matHeaderCellDef>City</th>
+      <td mat-cell *matCellDef="let element">{{ element.city }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="postcode">
+      <th mat-header-cell *matHeaderCellDef>Postcode</th>
+      <td mat-cell *matCellDef="let element">{{ element.postcode }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="country">
+      <th mat-header-cell *matHeaderCellDef>Country</th>
+      <td mat-cell *matCellDef="let element">{{ element.country }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="amount">
+      <th mat-header-cell *matHeaderCellDef>Amount</th>
+      <td mat-cell *matCellDef="let element">{{ element.amount | currency:'USD':'symbol':'1.2-2' }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="status">
+      <th mat-header-cell *matHeaderCellDef>Status</th>
+      <td mat-cell *matCellDef="let element">
+        {{ validateStatus(element.status) }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="deleted">
+      <th mat-header-cell *matHeaderCellDef>Deleted</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.deleted }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="last_modified">
+      <th mat-header-cell *matHeaderCellDef>Last Modified</th>
+      <td mat-cell *matCellDef="let element">
+         {{ element.last_modified.date | date:'yyyy-MM-dd HH:mm:ss' }} 
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="cancel">
+      <th mat-header-cell *matHeaderCellDef>Cancel</th>
+      <td mat-cell *matCellDef="let element">
+        <mat-icon
+          aria-hidden="false"
+          aria-label="Delete Icon"
+          fontIcon="block"
+          color="warn"
+          (click)="cancelItem($event)"
+          id="{{ element.id }}"
+        ></mat-icon>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
+  <mat-paginator
+    [pageSizeOptions]="[10]"
+    [pageSize]="10"
+    showFirstLastButtons
+    aria-label="Select page of periodic elements"
+  >
+  </mat-paginator>
+</div>
