@@ -8,7 +8,9 @@ To run the application correctly, please, follow the steps described below:
 * Open the terminal in project's folder;
 * Enter in `Docker` folder:
     * `cd Docker`
-* Build and run the Docker containers by typing the following command: 
+* You have to create a `.env` file, so you can do this simple command:
+    * `cp .env.dist .env`
+* After this, you can build and run the Docker containers by typing the following command: 
     * `docker-compose up -d`
     * This can take some time while Docker downloads the images in order to run the containers;
 * After the build is up, you'll see a message from Docker saying the containers are running, so you can proceed!
