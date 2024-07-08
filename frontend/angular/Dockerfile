@@ -9,6 +9,7 @@ RUN npm install -g @angular/cli@18
 
 COPY package.json package-lock.json ./
 RUN npm ci --legacy-peer-deps
+COPY . . 
 
 
 CMD ["ng", "serve", "--host", "0.0.0.0"]
@@ -27,5 +28,6 @@ usermod -aG docker vscode
 EOF
 # install Docker tools (cli, buildx, compose)
 COPY --from=gloursdocker/docker / /
+COPY . . 
 
 CMD ["ng", "serve", "--host", "0.0.0.0"]
