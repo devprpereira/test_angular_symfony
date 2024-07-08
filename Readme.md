@@ -23,6 +23,8 @@ To run the application correctly, please, follow the steps described below:
 
 The application was designed following the instructions and has these features:
 
+* You can access your database by opening (Adminer)[http://localhost:8080] and use the following credentials:
+   * User: `dbUser`; Password: `dbPassword`; Database: `myDatabase`; Server: `db` (name of Docker Service);
 * Frontend retrieves all `orders` from backend doing a GET request in the endpoint http://localhost/orders.
 * It's possible to cancel an order by clicking in 'Cancel' icon at the last table column. This action will fire a _PUT_ request to the backend in the endpoint http://localhost/orders/{orderid}
 * A snackbar is showed everytime an order is cancelled, improving user experience with visual feedback;
