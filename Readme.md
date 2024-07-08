@@ -12,6 +12,8 @@ To run the application correctly, please, follow the steps described below:
     * `docker-compose up -d`
     * This can take some time while Docker downloads the images in order to run the containers;
 * After the build is up, you'll see a message from Docker saying the containers are running, so you can proceed!
+* Now, you have to install Composer packages in order to let the backend run as expected:
+    * `docker exec symfony composer install`
 * You should run the following commands to create the `orders` table in Database:
     *  `docker exec symfony php bin/console doctrine:migrations:migrate`
 * After this, the database now has `orders` table. It's time to _import data from **orders.json** file_. To do this, you should run the following command in your terminal:
